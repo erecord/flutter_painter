@@ -140,17 +140,36 @@ class _ObjectWidgetState extends State<_ObjectWidget> {
   @override
   Widget build(BuildContext context) {
     final drawables = this.drawables;
-    final drawableAirTransformable = controller?.selectedObjectDrawable != null && controller?.shapeSettings.factory == null ;
-    final selectedDrawableEntry = drawableAirTransformable ? MapEntry<int, ObjectDrawable> (drawables.indexOf(controller!.selectedObjectDrawable!), controller!.selectedObjectDrawable!) : MapEntry<int, ObjectDrawable> (0, TextDrawable(position: Offset(0,0), text: '', ));
+    final drawableAirTransformable =
+        controller?.selectedObjectDrawable != null &&
+            controller?.shapeSettings.factory == null;
+    final selectedDrawableEntry = drawableAirTransformable
+        ? MapEntry<int, ObjectDrawable>(
+            drawables.indexOf(controller!.selectedObjectDrawable!),
+            controller!.selectedObjectDrawable!)
+        : MapEntry<int, ObjectDrawable>(
+            0,
+            TextDrawable(
+              position: const Offset(0, 0),
+              text: '',
+            ));
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
           Positioned.fill(
               child: GestureDetector(
                   onTap: onBackgroundTapped,
-                  onScaleStart: drawableAirTransformable ? (details) => onDrawableScaleStart(selectedDrawableEntry, details) : null,
-                  onScaleUpdate: drawableAirTransformable ? (details) => onDrawableScaleUpdate(selectedDrawableEntry, details) : null,
-                  onScaleEnd: drawableAirTransformable ? (_) => onDrawableScaleEnd(selectedDrawableEntry) : null, 
+                  onScaleStart: drawableAirTransformable
+                      ? (details) =>
+                          onDrawableScaleStart(selectedDrawableEntry, details)
+                      : null,
+                  onScaleUpdate: drawableAirTransformable
+                      ? (details) =>
+                          onDrawableScaleUpdate(selectedDrawableEntry, details)
+                      : null,
+                  onScaleEnd: drawableAirTransformable
+                      ? (_) => onDrawableScaleEnd(selectedDrawableEntry)
+                      : null,
                   child: widget.child)),
           ...drawables.asMap().entries.map((entry) {
             final drawable = entry.value;
@@ -1055,20 +1074,21 @@ class _ObjectControlBox extends StatelessWidget {
   /// Creates an [_ObjectControlBox] with the given [shape] and [active].
   ///
   /// By default, it will be a [BoxShape.rectangle] shape and not active.
-  const _ObjectControlBox({
-    Key? key,
-    this.shape = BoxShape.rectangle,
-    this.active = false,
-    this.inactiveColor = Colors.white,
-    this.activeColor,
-    this.shadowColor = Colors.black,
-  }) : super(key: key);
+  const _ObjectControlBox(
+      {Key? key,
+      this.shape = BoxShape.rectangle,
+      this.active = false,
+      this.activeColor,
+      this.inactiveColor = Colors.white,
+      this.shadowColor = Colors.black})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData? theme = Theme.of(context);
     if (theme == ThemeData.fallback()) theme = null;
-    final activeColor = this.activeColor ?? theme?.accentColor ?? Colors.blue;
+    final activeColor =
+        this.activeColor ?? theme?.colorScheme.secondary ?? Colors.blue;
     return AnimatedContainer(
       duration: _ObjectWidgetState.controlsTransitionDuration,
       decoration: BoxDecoration(
